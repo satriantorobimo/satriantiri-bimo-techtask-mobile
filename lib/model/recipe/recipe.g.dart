@@ -6,15 +6,15 @@ part of 'recipe.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RecepieModel _$RecepieModelFromJson(Map<String, dynamic> json) {
-  return RecepieModel(
+RecepieObject _$RecepieObjectFromJson(Map<String, dynamic> json) {
+  return RecepieObject(
     title: json['title'] as String,
     ingredients:
         (json['ingredients'] as List)?.map((e) => e as String)?.toList(),
   );
 }
 
-Map<String, dynamic> _$RecepieModelToJson(RecepieModel instance) =>
+Map<String, dynamic> _$RecepieObjectToJson(RecepieObject instance) =>
     <String, dynamic>{
       'title': instance.title,
       'ingredients': instance.ingredients,

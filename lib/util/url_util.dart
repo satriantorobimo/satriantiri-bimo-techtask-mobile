@@ -23,7 +23,7 @@ class URLUtil {
     return baseUrl + getIngredients();
   }
 
-  static String getRecipie() => 'recipes?ingredients=';
+  static String getRecipie() => '/recipes?ingredients=';
 
   String getRecipieURL() {
     return baseUrl + getRecipie();

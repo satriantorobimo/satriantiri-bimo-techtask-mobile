@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:tech_task/bloc/ingredients/bloc.dart';
 import 'package:tech_task/model/ingredients/ingredients.dart';
 import 'package:tech_task/repo/ingredients_repo.dart';
+import 'package:tech_task/screen/recipie.dart';
 import 'package:tech_task/util/value_string.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               if (chooseIngredients.isEmpty) {
                 _showToast(context, 'Harap pilih Ingredients');
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          RecipieScreen(chooseIngredients: chooseIngredients)),
+                );
               }
             },
             icon: Icon(Icons.fastfood),
@@ -83,9 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       } else if (state is IngredientsLoading) {
                         return const Center(child: Text('Loading'));
                       } else if (state is IngredientsSuccess) {
-                        final List<IngredientsObject> faqList =
+                        final List<IngredientsObject> ingredientsList =
                             state.ingredientsList;
-                        return showIngredients(faqList);
+                        return showIngredients(ingredientsList);
                       } else if (state is IngredientsException) {
                         return const Center(child: Text('Error'));
                       }
