@@ -32,60 +32,68 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('My Lunch Recipie'),
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
-          icon: Icon(Icons.fastfood),
-          label: const Text('Show Recipie')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(datetime == null
-                    ? 'Choos the date'
-                    : DateFormat.yMMMd().format(datetime).toString()),
-                GestureDetector(
-                    child: Icon(Icons.calendar_today),
-                    onTap: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2020),
-                              lastDate: DateTime(2021))
-                          .then((DateTime date) => {
-                                setState(() {
-                                  datetime = date;
-                                })
-                              });
-                    })
-              ],
-            ),
-            Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: const Text('List of Ingredients',
-                    style: TextStyle(fontWeight: FontWeight.bold))),
-            Container(
-              margin: const EdgeInsets.only(top: 70),
-              child: BlocBuilder(
-                  bloc: ingredientsBloc,
-                  builder: (_, IngredientsState state) {
-                    if (state is InitialIngredientsState) {
-                      return const Center(child: Text('Masih kosong'));
-                    } else if (state is IngredientsLoading) {
-                      return const Center(child: Text('Loading'));
-                    } else if (state is IngredientsSuccess) {
-                      final List<IngredientsObject> faqList =
-                          state.ingredientsList;
-                      return showIngredients(faqList);
-                    } else if (state is IngredientsException) {
-                      return const Center(child: Text('Error'));
-                    }
-                    return Container();
-                  }),
-            )
-          ],
+      floatingActionButton: Builder(builder: (BuildContext context) {
+        return FloatingActionButton.extended(
+            onPressed: () {
+              if (chooseIngredients.isEmpty) {
+                _showToast(context, 'Harap pilih Ingredients');
+              }
+            },
+            icon: Icon(Icons.fastfood),
+            label: const Text('Show Recipie'));
+      }),
+      body: Builder(
+        builder: (BuildContext context) => Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Stack(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(datetime == null
+                      ? 'Choos the date'
+                      : DateFormat.yMMMd().format(datetime).toString()),
+                  GestureDetector(
+                      child: Icon(Icons.calendar_today),
+                      onTap: () {
+                        showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(2021))
+                            .then((DateTime date) => {
+                                  setState(() {
+                                    datetime = date;
+                                  })
+                                });
+                      })
+                ],
+              ),
+              Container(
+                  margin: const EdgeInsets.only(top: 50),
+                  child: const Text('List of Ingredients',
+                      style: TextStyle(fontWeight: FontWeight.bold))),
+              Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: BlocBuilder(
+                    bloc: ingredientsBloc,
+                    builder: (_, IngredientsState state) {
+                      if (state is InitialIngredientsState) {
+                        return const Center(child: Text('Masih kosong'));
+                      } else if (state is IngredientsLoading) {
+                        return const Center(child: Text('Loading'));
+                      } else if (state is IngredientsSuccess) {
+                        final List<IngredientsObject> faqList =
+                            state.ingredientsList;
+                        return showIngredients(faqList);
+                      } else if (state is IngredientsException) {
+                        return const Center(child: Text('Error'));
+                      }
+                      return Container();
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -110,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     DateTime.parse(ingredientsList[index].useBy);
 
                 if (datetime.isAfter(dateTimes)) {
-                  _showToast(context);
+                  _showToast(context, 'Tidak bisa karena sudah basi');
                 } else {
                   if (!chooseIngredients.contains(ingredientsList[index].title))
                     chooseIngredients.add(ingredientsList[index].title);
@@ -166,6 +174,9 @@ class _HomeScreenState extends State<HomeScreen> {
             FlatButton(
               child: const Text('Ok'),
               onPressed: () {
+                setState(() {
+                  datetime ??= DateTime.now();
+                });
                 ingredientsBloc.dispatch(GetIngredients());
                 Navigator.of(context).pop();
               },
@@ -176,10 +187,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showToast(BuildContext context) {
+  void _showToast(BuildContext context, String msg) {
     final ScaffoldState scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
-      const SnackBar(content: Text('Tidak bisa karena sudah basi')),
+      SnackBar(content: Text('$msg')),
     );
   }
 }
