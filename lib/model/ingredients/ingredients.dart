@@ -3,12 +3,12 @@ import 'package:json_annotation/json_annotation.dart';
 part 'ingredients.g.dart';
 
 class IngredientsModel extends Equatable {
-  List<IngredientsObject> ingredientsList;
+  final List<IngredientsObject> ingredientsList;
 
   IngredientsModel({this.ingredientsList});
 
   factory IngredientsModel.fromJson(List<dynamic> parsedJson) {
-    List<IngredientsObject> ingredientsList = List<IngredientsObject>();
+    List<IngredientsObject> ingredientsList = <IngredientsObject>[];
     ingredientsList =
         parsedJson.map((i) => IngredientsObject.fromJson(i)).toList();
 

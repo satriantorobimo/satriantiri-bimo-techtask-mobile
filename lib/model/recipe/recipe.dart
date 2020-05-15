@@ -3,12 +3,12 @@ import 'package:json_annotation/json_annotation.dart';
 part 'recipe.g.dart';
 
 class RecepieModel extends Equatable {
-  List<RecepieObject> recepiesList;
+  final List<RecepieObject> recepiesList;
 
   RecepieModel({this.recepiesList});
 
   factory RecepieModel.fromJson(List<dynamic> parsedJson) {
-    List<RecepieObject> recepiesList = List<RecepieObject>();
+    List<RecepieObject> recepiesList = <RecepieObject>[];
     recepiesList = parsedJson.map((i) => RecepieObject.fromJson(i)).toList();
 
     return RecepieModel(recepiesList: recepiesList);

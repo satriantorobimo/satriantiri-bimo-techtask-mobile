@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.green),
             onTap: () {
               setState(() {
-                DateTime dateTimes =
+                final DateTime dateTimes =
                     DateTime.parse(ingredientsList[index].useBy);
 
                 if (datetime.isAfter(dateTimes)) {
