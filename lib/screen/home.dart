@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: Builder(builder: (BuildContext context) {
         return FloatingActionButton.extended(
+            key: const Key('btn_go_recipe'),
             onPressed: () {
               if (chooseIngredients.isEmpty) {
                 _showToast(context, 'Harap pilih Ingredients');
@@ -58,11 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(datetime == null
-                      ? 'Choos the date'
-                      : DateFormat.yMMMd().format(datetime).toString()),
+                  Text(
+                      datetime == null
+                          ? 'Choos the date'
+                          : DateFormat.yMMMd().format(datetime).toString(),
+                      key: const Key('txt_date_first')),
                   GestureDetector(
                       child: Icon(Icons.calendar_today),
+                      key: const Key('btn_choose_date'),
                       onTap: () {
                         showDatePicker(
                                 context: context,
@@ -112,9 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: ingredientsList.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          title: Text(ingredientsList[index].title),
+          title:
+              Text(ingredientsList[index].title, key: const Key('txt_title')),
           subtitle: Text(ingredientsList[index].useBy),
           leading: GestureDetector(
+            key: !chooseIngredients.contains(ingredientsList[index].title)
+                ? const Key('add')
+                : const Key('remove'),
             child: Icon(
                 !chooseIngredients.contains(ingredientsList[index].title)
                     ? Icons.add
@@ -157,11 +165,14 @@ class _HomeScreenState extends State<HomeScreen> {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(datetime == null
-                  ? 'Choos the date'
-                  : DateFormat.yMMMd().format(datetime).toString()),
+              Text(
+                  datetime == null
+                      ? 'Choos the date'
+                      : DateFormat.yMMMd().format(datetime).toString(),
+                  key: const Key('txt_date_dialog')),
               GestureDetector(
                   child: Icon(Icons.calendar_today),
+                  key: const Key('btn_calendar'),
                   onTap: () {
                     showDatePicker(
                             context: context,
@@ -181,6 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: <Widget>[
             FlatButton(
               child: const Text('Ok'),
+              key: const Key('btn_ok'),
               onPressed: () {
                 setState(() {
                   datetime ??= DateTime.now();
